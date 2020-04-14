@@ -26,4 +26,19 @@ public class AuthServerController {
 	public boolean auth(@RequestBody final String client_id) {
 		return authServerRepository.auth(client_id);
 	}
+	
+	@RequestMapping(value = "/getAuthCode", method = RequestMethod.POST)
+	public String getAuthCode(@RequestBody final String username, final String password) {
+		return authServerRepository.getAuthCode(username, password);
+	}
+	
+	@RequestMapping(value = "/getAccessToken", method = RequestMethod.POST)
+	public String getAccessToken(@RequestBody final String auth_code) {
+		return authServerRepository.getAccessToken(auth_code);
+	}
+	
+	@RequestMapping(value = "/validateAccessToken", method = RequestMethod.POST)
+	public boolean validateAccessToken(@RequestBody final String access_token) {
+		return authServerRepository.validateAccessToken(access_token);
+	}
 }
