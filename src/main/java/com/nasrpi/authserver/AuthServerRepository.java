@@ -30,5 +30,66 @@ public class AuthServerRepository {
 			return false;
 		}
 	}
+	
+	public String getAuthCode(String username, String password) {
 
+		JSONParser parser = new JSONParser();
+		Object obj = null;
+		Object authObj = null;
+		
+		try {
+			obj = parser.parse(new FileReader(
+					"C:\\Users\\Ajay\\Documents\\NAS with RPi\\OAuth2 Server\\src\\main\\resources\\UserCredentials.json"));
+			JSONObject jsonObject = (JSONObject) obj;
+			
+			//parse the Tokens.json file to retrieve authorization token
+			authObj = parser.parse(new FileReader(
+					"C:\\Users\\Ajay\\Documents\\NAS with RPi\\OAuth2 Server\\src\\main\\resources\\Tokens.json"));
+			JSONObject jsonAuthObject = (JSONObject) authObj;
+			
+			if (jsonObject.get("username").toString().equals(username) && jsonObject.get("password").toString().equals(password))
+				return jsonAuthObject.get("authcode").toString();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+	
+	public String getAccessToken(String authCode) {
+
+		JSONParser parser = new JSONParser();
+		Object obj = null;
+		
+		try {
+			obj = parser.parse(new FileReader(
+					"C:\\Users\\Ajay\\Documents\\NAS with RPi\\OAuth2 Server\\src\\main\\resources\\Tokens.json"));
+			JSONObject jsonObject = (JSONObject) obj;
+			
+			if (jsonObject.get("authcode").toString().equals(authCode))
+				return jsonObject.get("accesstoken").toString();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+	
+	public boolean validateAccessToken(String accessToken) {
+		JSONParser parser = new JSONParser();
+		Object obj = null;
+		try {
+			obj = parser.parse(new FileReader(
+					"C:\\Users\\Ajay\\Documents\\NAS with RPi\\OAuth2 Server\\src\\main\\resources\\Tokens.json"));
+			JSONObject jsonObject = (JSONObject) obj;
+			return jsonObject.get("accesstoken").toString().equals(accessToken);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 }
